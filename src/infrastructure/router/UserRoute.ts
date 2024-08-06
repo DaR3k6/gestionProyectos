@@ -10,5 +10,7 @@ const userCase = new UserCase(mongoseRepository);
 const userController = new UserController(userCase);
 
 route.post("/user", userController.insertController);
+route.get("/user/:_id", userController.getIdController);
+route.get("/user", userController.getController);
 
 export default route;

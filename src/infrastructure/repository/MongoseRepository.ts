@@ -8,7 +8,7 @@ export class MongoseRepository implements UserRepository {
     return user;
   }
   async registerUser(userIn: UserEntity): Promise<any> {
-    const user = await UserModels.create({ userIn });
+    const user = await UserModels.create(userIn);
     return user;
   }
   async listUsers(): Promise<any> {
