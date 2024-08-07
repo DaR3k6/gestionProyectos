@@ -6,22 +6,30 @@ import userRouter from "./infrastructure/router/UserRoute";
 import proyectRouter from "./infrastructure/router/ProyectRoute";
 import taskRouter from "./infrastructure/router/TaskRoute";
 
-//CONEXION MIDDLEAWRE
+// Inicializa la aplicación Express
 const port = process.env.PORT || 3001;
 const app = express();
+
+// Middleware
 app.use(cors());
 app.use(express.json());
-
 app.use(express.urlencoded({ extended: true }));
-
-//CONECTO LA BASE DE DATOS
-conexion().then();
 
 //RUTAS
 app.use(userRouter);
 app.use(proyectRouter);
 app.use(taskRouter);
 
-app.listen(port, () => {
-  console.log(`El puerto es : ${port}`);
-});
+// Conecta a MongoDB
+const startServer = async () => {
+  try {
+    await conexion();
+    app.listen(port, () => {
+      console.log(`Servidor corriendo en el puerto: ${port}`);
+    });
+  } catch (error) {
+    console.error("No se pudo iniciar el servidor:", error);
+    process.exit(1);
+  }
+};
+startServer();

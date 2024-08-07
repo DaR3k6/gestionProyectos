@@ -35,10 +35,7 @@ export class UserCase {
   }): Promise<UserValue | null> => {
     const userValue = new UserValue({ name: "", email, password: "" });
     const user = await this.userRepository.findUserLogin(userValue.email);
-    if (user && user.password == password) {
-      return new UserValue(user);
-    }
-    return null;
+    return user;
   };
 
   public listUsers = async (): Promise<UserValue[] | null> => {
