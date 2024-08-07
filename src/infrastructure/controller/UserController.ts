@@ -166,4 +166,104 @@ export class UserController {
       });
     }
   };
+
+  /**
+   * Actualiza un usuario
+   * @param req - Solicitud HTTP
+   * @param res - Respuesta HTTP
+   */
+  public updateController = async (req: Request, res: Response) => {
+    try {
+      const { _id } = req.params;
+      const { name, email, password, role, projects, tasks } = req.body;
+
+      // Verifica si el ID del usuario está presente
+      if (!_id) {
+        return res.status(400).send({
+          titulo: "Error",
+          mensaje: "ID del usuario es requerido",
+          status: false,
+        });
+      }
+
+      // Encriptar la nueva contraseña si se proporciona
+      let hashedPassword = password;
+      if (password) {
+        hashedPassword = await bcrypt.hash(password, 10);
+      }
+
+      const updatedUser = await this.userUseCase.updateUser({
+        _id,
+        name,
+        email,
+        password: hashedPassword,
+        role,
+        projects,
+        tasks,
+      });
+
+      if (updatedUser) {
+        res.status(200).send({
+          titulo: "Actualizado",
+          mensaje: "Usuario actualizado correctamente",
+          user: updatedUser,
+          status: true,
+        });
+      } else {
+        res.status(404).send({
+          titulo: "Error",
+          mensaje: "Usuario no encontrado",
+          status: false,
+        });
+      }
+    } catch (error: any) {
+      res.status(500).send({
+        titulo: "Error",
+        mensaje: `Error en la base de datos: ${error.message}`,
+        status: false,
+      });
+    }
+  };
+
+  /**
+   * Elimina un usuario por su ID
+   * @param req - Solicitud HTTP
+   * @param res - Respuesta HTTP
+   */
+  public deleteController = async (req: Request, res: Response) => {
+    try {
+      const { _id } = req.params;
+
+      // Verifica si el ID del usuario está presente
+      if (!_id) {
+        return res.status(400).send({
+          titulo: "Error",
+          mensaje: "ID del usuario es requerido",
+          status: false,
+        });
+      }
+
+      const deleted = await this.userUseCase.deleteUser(_id);
+
+      if (deleted) {
+        res.status(200).send({
+          titulo: "Eliminado",
+          mensaje: "Usuario eliminado correctamente",
+          status: true,
+        });
+      } else {
+        res.status(404).send({
+          titulo: "Error",
+          mensaje: "Usuario no encontrado",
+          status: false,
+        });
+      }
+    } catch (error: any) {
+      res.status(500).send({
+        titulo: "Error",
+        mensaje: `Error en la base de datos: ${error.message}`,
+        status: false,
+      });
+    }
+  };
 }
