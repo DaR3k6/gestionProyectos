@@ -1,13 +1,13 @@
 import { Router } from "express";
-import { MongoseRepository } from "../repository/MongoseRepository";
+import { TasksRepository } from "../repository/TaskRepository";
 import { TaskCase } from "../../app/TaskCase";
 import { TaskController } from "../controller/TaskController";
 
 import auth from "../jwt/auth";
 const route = Router();
 
-const mongoseRepository = new MongoseRepository();
-const taskCase = new TaskCase(mongoseRepository);
+const taskRepository = new TasksRepository();
+const taskCase = new TaskCase(taskRepository);
 const taskController = new TaskController(taskCase);
 
 route.post("/task", auth, taskController.createTaskController);

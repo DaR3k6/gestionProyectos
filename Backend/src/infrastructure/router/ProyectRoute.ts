@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { MongoseRepository } from "../repository/MongoseRepository";
+import { ProjectRepository } from "../repository/ProjectRepository";
 import { ProyectsCase } from "../../app/ProyectsCase";
 import { ProjectController } from "../controller/ProyectController";
 
@@ -7,8 +7,8 @@ import auth from "../jwt/auth";
 
 const route = Router();
 
-const mongoseRepository = new MongoseRepository();
-const proyectCase = new ProyectsCase(mongoseRepository);
+const projectRepository = new ProjectRepository();
+const proyectCase = new ProyectsCase(projectRepository);
 const proyectController = new ProjectController(proyectCase);
 
 route.post("/project", auth, proyectController.insertController);

@@ -1,13 +1,13 @@
 import { Router } from "express";
-import { MongoseRepository } from "../repository/MongoseRepository";
+import { UsersRepository } from "../repository/UserRepository";
 import { UserCase } from "../../app/UserCase";
 import { UserController } from "../controller/UserController";
 import auth from "../jwt/auth";
 
 const route = Router();
 
-const mongoseRepository = new MongoseRepository();
-const userCase = new UserCase(mongoseRepository);
+const userRepository = new UsersRepository();
+const userCase = new UserCase(userRepository);
 const userController = new UserController(userCase);
 
 route.post("/user/register", userController.insertController);
